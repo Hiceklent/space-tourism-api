@@ -19,25 +19,24 @@ const middlewares = jsonServer.defaults()
 server.use(middlewares)
 
 
-// Obtener la URL base
 server.get('/api', (req, res) => {
-    const baseUrl = process.env.VERCEL_URL 
-        ? `https://${process.env.VERCEL_URL}/api` 
-        : `${req.protocol}://${req.get('host')}/api`;
-
+    const baseUrl = req.protocol + '://' + req.get('host') + '/api';
     const endpoints = {
-        destinations: `${baseUrl}/destinations`,
-        crew: `${baseUrl}/crew`,
-        technology: `${baseUrl}/technology`
+      destinations: `${baseUrl}/destinations`,
+      crew: `${baseUrl}/crew`,
+      technology: `${baseUrl}/technology`
     };
     res.json(endpoints);
-});
+  });
+  
+  // Rewrite the API routes
+  server.use(jsonServer.rewriter({
+    '/api/destinations': '/destinations',
+    '/api/crew': '/crew',
+    '/api/technology': '/technology'
+  }));
 
-// Add this before server.use(router)
-server.use(jsonServer.rewriter({
-    '/api': '/$1',
-    '/blog/:resource/:id/show': '/:resource/:id'
-}))
+
 server.use('/api',router)
 server.listen(3000, () => {
     console.log('JSON Server is running')
