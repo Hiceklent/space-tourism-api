@@ -7,8 +7,8 @@
     "start": "node api/server.js"
   },
   "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "author": "Holguer Pinzon",
+  "license": "MIT",
   "dependencies": {
     "cors": "^2.8.5",
     "json-server": "0.17.4"
