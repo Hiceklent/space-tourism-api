@@ -17,12 +17,26 @@ const router = jsonServer.router('data.json')
 const middlewares = jsonServer.defaults()
 
 server.use(middlewares)
+
+
+
+server.get('/api', (req, res) => {
+    const baseUrl = req.protocol + '://' + req.get('host') + '/api';
+    const endpoints = {
+        destinations: `${baseUrl}/destinations`,
+        crew: `${baseUrl}/crew`,
+        technology: `${baseUrl}/technology`
+    };
+    res.json(endpoints);
+});
+
+
 // Add this before server.use(router)
 server.use(jsonServer.rewriter({
-    '/api/*': '/$1',
+    '/api': '/$1',
     '/blog/:resource/:id/show': '/:resource/:id'
 }))
-server.use(router)
+server.use('/api',router)
 server.listen(3000, () => {
     console.log('JSON Server is running')
 })
